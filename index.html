@@ -13,10 +13,15 @@
     <meta property="og:description" content="Book Dance Break for interactive dance experiences and challenges. The next-gen photobooth. Perfect for all skill levels. Elevate your event today." />
     <meta property="og:url" content="https://www.playdancebreak.com" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://www.playdancebreak.com/images/og-image.png" />
+    <meta property="og:image" content="https://www.playdancebreak.com/images/og-image.jpg" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Dance Break | Book Now" />
-    <meta name="twitter:image" content="https://www.playdancebreak.com/images/og-image.png" />
+    <meta name="twitter:image" content="https://www.playdancebreak.com/images/og-image.jpg" />
+
+    <!-- Start the hero image download before the app script runs (largest image above the fold). -->
+    <link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      imagesrcset="/images/hero-phones-600.webp 600w, /images/hero-phones-900.webp 900w, /images/hero-phones-1200.webp 1200w"
+      imagesizes="(max-width: 860px) min(560px, calc(100vw - 32px)), 600px" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

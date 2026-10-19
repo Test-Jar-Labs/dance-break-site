@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Img from '../components/Img.jsx';
 import usePageMeta from '../components/usePageMeta.js';
 import { Link } from 'react-router-dom';
@@ -71,7 +71,8 @@ export default function Home() {
             <p className="small">From $2,500. Every quote is custom. Based in Los Angeles.</p>
           </div>
           <div className="hero-media">
-            <Img asset={ASSETS.heroPhones} alt="Guests playing Dance Break and the videos they received" width="2403" height="1867" loading="eager" fetchpriority="high" />
+            <Img asset={ASSETS.heroPhones} alt="Guests playing Dance Break and the videos they received" width="2403" height="1867"
+              sizes="(max-width: 860px) min(560px, calc(100vw - 32px)), 600px" loading="eager" fetchpriority="high" />
           </div>
         </div>
       </section>
@@ -107,7 +108,7 @@ export default function Home() {
             </p>
           </div>
           <div className="how-media" data-reveal>
-            <Img asset={ASSETS.photobooth} alt="The Dance Break kiosk" width="860" height="1323" />
+            <Img asset={ASSETS.photobooth} alt="The Dance Break kiosk" width="860" height="1323" sizes="(max-width: 860px) 260px, 400px" />
           </div>
         </div>
       </section>
@@ -121,7 +122,7 @@ export default function Home() {
             {EVENT_TYPES.map((e, i) => (
               <article className="event" key={e.type} data-reveal style={{ '--delay': `${i * 100}ms` }}>
                 <div className="event-media">
-                  <Img asset={e.image} alt="" width={e.size[0]} height={e.size[1]} />
+                  <Img asset={e.image} alt="" width={e.size[0]} height={e.size[1]} sizes="(max-width: 900px) min(520px, calc(100vw - 32px)), 340px" />
                 </div>
                 <h3>{e.title}</h3>
                 <p>{e.body}</p>
@@ -143,7 +144,7 @@ export default function Home() {
               <li key={p.href} data-reveal style={{ '--delay': `${i * 80}ms` }}>
                 <a className="ig-card" href={p.href} target="_blank" rel="noreferrer">
                   <div className="ig-media">
-                    <Img asset={p.asset} alt="" width="600" height="600" />
+                    <Img asset={p.asset} alt="" width="800" height="1000" sizes="(max-width: 900px) 50vw, 260px" />
                   </div>
                   <span>{p.title}<span className="sr-only"> on Instagram (opens in a new tab)</span></span>
                 </a>
@@ -166,35 +167,43 @@ export default function Home() {
   );
 }
 
-// Autoplays muted unless the visitor prefers reduced motion. The whole section is
-// hidden if the video file hasn't been added to public/video yet.
+// Doesn't download until it's about to scroll into view, then autoplays muted (unless the
+// visitor prefers reduced motion, in which case it waits for them to press play).
 function PromoVideo() {
   const ref = useRef(null);
-  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      ref.current?.play().catch(() => {});
-    }
+    const video = ref.current;
+    if (!video || !('IntersectionObserver' in window)) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      video.preload = 'auto';
+      if (!reduce) video.play().catch(() => {});
+    }, { rootMargin: '300px 0px' });
+    io.observe(video);
+    return () => io.disconnect();
   }, []);
 
-  if (failed) return null;
   return (
     <section className="video-section">
       <div className="container">
         <video
           ref={ref}
           className="promo-video"
-          src={VIDEO.local}
           muted
           loop
           playsInline
           controls
-          preload="metadata"
-          poster={ASSETS.photobooth.local}
+          preload="none"
+          poster={VIDEO.poster}
+          width="1920"
+          height="1080"
           aria-label="Dance Break promo video"
-          onError={() => setFailed(true)}
-        />
+        >
+          {VIDEO.sources.map((v) => <source key={v.src} src={v.src} media={v.media} type="video/mp4" />)}
+        </video>
       </div>
     </section>
   );

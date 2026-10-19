@@ -17,18 +17,40 @@ There are no forms. Quote, contact and partner pages show dancebreak@testjarlabs
 
 ```bash
 npm install
-npm run fetch-assets   # downloads all images (and the promo video, if ffmpeg is installed) from Squarespace into public/
 npm run dev            # http://localhost:5173
 ```
 
-Run `fetch-assets` **before you cancel Squarespace** — afterwards those URLs stop working. Until it's run, images fall back to the Squarespace URLs automatically.
+### Images
 
-**Promo video:** if the script can't save it (needs `ffmpeg`, e.g. `brew install ffmpeg`), copy your original `DBAd1_Horizontal.mp4` to `public/video/dance-break.mp4`. Keep it under ~20 MB for fast loading.
+Images are self-hosted WebP files in `public/images`, built from the originals in `source-images/`
+(kept in the repo so they survive cancelling Squarespace). Sizes are set in `src/assets.js`: photos
+get several widths for `srcset` (the largest is ~2x their biggest on-screen size, so they stay sharp
+on retina screens) and logos get one file at 3x their display height.
+
+To add or replace an image, put the original in `source-images/` (or add its URL to `src/assets.js`),
+then run:
+
+```bash
+npm run optimize-images
+```
+
+### Promo video
+
+`public/video` holds a 1080p and a 720p H.264 mp4 (phones get the 720p one) and a WebP poster,
+built from `source-images/video/dance-break-original.mp4`. The video only downloads once a visitor
+scrolls near it. To replace it, swap the original and rebuild with [ffmpeg](https://ffmpeg.org):
+
+```bash
+S=source-images/video/dance-break-original.mp4
+ffmpeg -y -i $S -c:v libx264 -preset slower -crf 27 -tune film -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart public/video/dance-break-1080.mp4
+ffmpeg -y -i $S -vf scale=-2:720:flags=lanczos -c:v libx264 -preset slower -crf 27 -tune film -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart public/video/dance-break-720.mp4
+ffmpeg -y -ss 2 -i $S -frames:v 1 -vf scale=1280:-2 -c:v libwebp -quality 78 public/video/poster.webp
+```
 
 ## 2. Push to GitHub
 
 ```bash
-git add -A && git commit -m "Add self-hosted images and video"
+git add -A && git commit -m "Update site"
 git remote add origin https://github.com/<you>/dancebreak-site.git
 git push -u origin main
 ```
@@ -52,6 +74,6 @@ Every push to `main` redeploys automatically; other branches get preview URLs.
 
 ## Editing content
 
-- Copy lives in `src/pages/*.jsx`; images are listed in `src/assets.js`.
+- Copy lives in `src/pages/*.jsx`; images are listed in `src/assets.js` (see **Images** above).
 - Colors and fonts are tokens at the top of `src/styles.css`.
 - Instagram posts on the home page are the `POSTS` list in `src/pages/Home.jsx` (Squarespace's live Instagram feed doesn't carry over; update the list when you want new posts featured).
