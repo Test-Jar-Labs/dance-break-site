@@ -27,6 +27,20 @@ export default function Header() {
     };
   }, [open]);
 
+  // On phones the header button would repeat the hero's own "Get a quote" right below it, so it
+  // stays tucked away until the hero buttons scroll out of view (see .is-tucked in styles.css).
+  const [heroCtaVisible, setHeroCtaVisible] = useState(false);
+  useEffect(() => {
+    const heroCta = document.querySelector('.hero-actions');
+    if (!heroCta || !('IntersectionObserver' in window)) {
+      setHeroCtaVisible(false);
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setHeroCtaVisible(e.isIntersecting), { rootMargin: '-72px 0px 0px 0px' });
+    io.observe(heroCta);
+    return () => io.disconnect();
+  }, [pathname]);
+
   return (
     <header ref={headerRef} className={`site-header ${open ? 'is-open' : ''}`}>
       <div className="container header-inner">
@@ -38,7 +52,12 @@ export default function Header() {
           {NAV.map((n) => <NavLink key={n.to} to={n.to}>{n.label}</NavLink>)}
         </nav>
 
-        <Link to="/book-now" className="btn btn-primary btn-sm">Get a quote</Link>
+        {/* Not shown on the quote page itself. */}
+        {pathname !== '/book-now' && (
+          <Link to="/book-now" className={`btn btn-primary btn-sm header-cta ${heroCtaVisible ? 'is-tucked' : ''}`}>
+            Get a quote
+          </Link>
+        )}
 
         <button
           className="menu-toggle"

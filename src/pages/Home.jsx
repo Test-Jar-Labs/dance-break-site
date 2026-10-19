@@ -7,7 +7,6 @@ import { ASSETS, VIDEO, LINKS } from '../assets.js';
 const EVENT_TYPES = [
   {
     type: 'corporate',
-    cta: 'Quote for a corporate event',
     title: 'Corporate events & expos',
     image: ASSETS.corporate,
     size: [603, 634],
@@ -15,7 +14,6 @@ const EVENT_TYPES = [
   },
   {
     type: 'party',
-    cta: 'Quote for a party',
     title: 'Parties & celebrations',
     image: ASSETS.parties,
     size: [603, 616],
@@ -23,7 +21,6 @@ const EVENT_TYPES = [
   },
   {
     type: 'wedding',
-    cta: 'Quote for a wedding',
     title: 'Weddings',
     image: ASSETS.weddings,
     size: [712, 604],
@@ -80,13 +77,16 @@ export default function Home() {
       <section className="logos" aria-label="Brands we’ve worked with">
         <div className="container">
           <p>Trusted at events for EDC, Alibaba, Databricks and more</p>
-          <ul className="logo-row">
-            {BRANDS.map((b, i) => (
-              <li key={b.name} data-reveal style={{ '--delay': `${i * 60}ms` }}>
-                <Img asset={b.asset} alt={b.name} />
-              </li>
-            ))}
-          </ul>
+          {/* On phones this becomes one slowly scrolling row. The second copy makes the loop seamless;
+              it's hidden from screen readers and only shown on phones. */}
+          <div className="logo-track">
+            <ul className="logo-row">
+              {BRANDS.map((b) => <li key={b.name}><Img asset={b.asset} alt={b.name} /></li>)}
+              {BRANDS.map((b) => (
+                <li key={b.name + '-loop'} className="logo-loop" aria-hidden="true"><Img asset={b.asset} alt="" /></li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -126,7 +126,9 @@ export default function Home() {
                 </div>
                 <h3>{e.title}</h3>
                 <p>{e.body}</p>
-                <Link to="/book-now" className="btn btn-outline btn-sm">{e.cta}</Link>
+                <Link to="/book-now" className="btn btn-outline btn-sm">
+                  Get a quote<span className="sr-only"> for {e.title.toLowerCase()}</span>
+                </Link>
               </article>
             ))}
           </div>

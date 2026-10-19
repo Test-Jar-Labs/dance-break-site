@@ -55,7 +55,8 @@ p { margin: 0 0 1em; }
 
 /* ---------- Buttons & links ---------- */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center;
+  /* relative: keeps hidden screen-reader text inside the button (e.g. in the swipe row). */
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
   min-height: 52px; padding: 14px 32px; border: 0; border-radius: 999px;
   font: 800 15px/1.2 var(--font); text-transform: uppercase; letter-spacing: .03em;
   text-decoration: none; cursor: pointer;
@@ -99,6 +100,8 @@ p { margin: 0 0 1em; }
   .header-logo img { height: 32px; }
   .header-nav { display: none; }
   .menu-toggle { display: block; }
+  .header-cta { padding: 10px 18px; transition: opacity .2s, visibility .2s, transform .25s var(--ease-out); }
+  .header-cta.is-tucked { opacity: 0; visibility: hidden; transform: translateY(-6px); }
   /* Drops over the page (instead of pushing it down) so it reads clearly as a menu. */
   .mobile-menu:not([hidden]) {
     position: absolute; top: 100%; left: 0; right: 0;
@@ -140,6 +143,8 @@ p { margin: 0 0 1em; }
 .logo-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px clamp(32px, 5vw, 64px); list-style: none; margin: 0; padding: 0; }
 .logo-row img { height: 36px; width: auto; max-width: 140px; object-fit: contain; transition: transform .25s var(--ease-out); }
 .logo-row img:hover { transform: translateY(-3px) scale(1.06); }
+.logo-loop { display: none; }
+@keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- How it works ---------- */
 /* The kiosk sits on the bottom edge of the purple band, like it's standing on the floor. */
@@ -278,9 +283,30 @@ p { margin: 0 0 1em; }
      footage, capped so it never fills the whole screen. */
   .promo-video { aspect-ratio: 9 / 16; max-height: 75svh; }
 
-  /* Collage images line up with the left-aligned text under them. */
-  .event-grid { gap: 56px; }
-  .event-media { height: 220px; justify-content: flex-start; margin-bottom: 20px; }
+  /* Event types become a swipe row. The next card peeks in at the edge so it's clear there's more. */
+  .event-grid {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: 24px; max-width: none;
+    margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 4px; scroll-padding: 0 var(--gutter);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+  }
+  .event-grid::-webkit-scrollbar { display: none; }
+  .event { scroll-snap-align: start; }
+  .event-media { height: 200px; justify-content: flex-start; margin-bottom: 20px; }
+
+  /* Brand logos: one row that loops slowly, faded at the edges, instead of three uneven rows. */
+  .logos { padding: 32px 0 36px; }
+  .logos p { margin-bottom: 20px; }
+  .logo-track {
+    overflow: hidden; margin: 0 calc(var(--gutter) * -1);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .logo-row { flex-wrap: nowrap; justify-content: flex-start; width: max-content; gap: 0; animation: marquee 32s linear infinite; }
+  .logo-row li { flex: none; padding-right: 44px; }
+  .logo-loop { display: block; }
+  .logo-row img { height: 30px; }
+
+  .how-copy p { font-size: 17px; }
 
   /* Footer links stack as full-height rows instead of wrapping unevenly. */
   .footer-top { flex-direction: column; gap: 16px; padding-bottom: 16px; }
@@ -288,4 +314,11 @@ p { margin: 0 0 1em; }
   .footer-nav a, .footer-nav span { display: flex; align-items: center; min-height: 44px; }
   .footer-bottom { flex-direction: column-reverse; align-items: flex-start; gap: 8px; }
   .footer-social { margin-left: -12px; }
+}
+
+/* Phones with reduced motion: no looping logos; the single set can be swiped instead. */
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .logo-track { overflow-x: auto; -webkit-mask-image: none; mask-image: none; scrollbar-width: none; }
+  .logo-loop { display: none; }
+  .logo-row { padding: 0 var(--gutter); }
 }
