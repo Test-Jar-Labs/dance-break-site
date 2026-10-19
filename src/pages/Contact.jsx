@@ -1,24 +1,27 @@
-import InquiryForm from '../components/InquiryForm.jsx';
+import { Link } from 'react-router-dom';
+import EmailBlock from '../components/EmailBlock.jsx';
 import usePageMeta from '../components/usePageMeta.js';
 
-const FIELDS = [
-  { name: 'name', type: 'name' },
-  { name: 'email', label: 'Email', type: 'email', required: true },
-  { name: 'subject', label: 'Subject', type: 'text', required: true },
-  { name: 'message', label: 'Message', type: 'textarea', required: true },
-];
-
 export default function Contact() {
-  usePageMeta('Dance Break | Request More Info', 'Tell us about your event and we’ll help you plan the best Dance Break experience.');
+  usePageMeta('Dance Break | Contact', 'Email Dance Break with any questions about your event.');
   return (
-    <section className="section section-white form-page">
-      <div className="container form-layout">
-        <div className="form-intro">
-          <h1 className="page-title">Request more info</h1>
-          <p>Tell us about your event and we’ll work with you to provide the best experience for your event.</p>
+    <>
+      <section className="page-head">
+        <div className="container">
+          <h1>Contact us</h1>
+          <p className="lead">Have a question? Email us and we’ll get back to you.</p>
         </div>
-        <InquiryForm formName="Contact / Request Info" fields={FIELDS} />
-      </div>
-    </section>
+      </section>
+      <section className="section">
+        <div className="container">
+          <div className="contact">
+            <EmailBlock />
+            <p>
+              Planning an event? See <Link to="/book-now">what to include</Link> so we can send your quote faster.
+            </p>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

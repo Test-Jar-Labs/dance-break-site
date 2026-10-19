@@ -5,11 +5,11 @@ React (Vite) rebuild of the Squarespace site, deployed on Vercel from GitHub.
 | Route | Page |
 |---|---|
 | `/` | Home |
-| `/book-now` | Book Now (quote form) |
-| `/contact-us` | Request more info (contact form) |
-| `/partner-referral-program` | Referral program + application form |
+| `/book-now` | Get a quote (email + what to include) |
+| `/contact-us` | Contact (email) |
+| `/partner-referral-program` | Referral program (apply by email) |
 
-Forms post to `api/submit.js`, a Vercel serverless function that emails each submission to you via [Resend](https://resend.com).
+There are no forms. Quote, contact and partner pages show dancebreak@testjarlabs.com with a "Copy email" button (`src/components/EmailBlock.jsx`); the site never opens an email app.
 
 ---
 
@@ -36,12 +36,7 @@ git push -u origin main
 ## 3. Deploy on Vercel
 
 1. vercel.com → **Add New → Project** → import the GitHub repo. Framework is detected as **Vite**; leave the defaults.
-2. **Settings → Environment Variables** — add:
-   - `RESEND_API_KEY` — from resend.com → API Keys
-   - `FORM_TO_EMAIL` — `dancebreak@testjarlabs.com` (comma-separate for more than one)
-   - `FORM_FROM_EMAIL` — e.g. `Dance Break <forms@playdancebreak.com>`
-3. In Resend → **Domains**, add `playdancebreak.com` and add the DNS records it shows (so `FORM_FROM_EMAIL` can send). Until then you can test with `onboarding@resend.dev` as the sender.
-4. Redeploy, then submit each form on the `*.vercel.app` URL to confirm emails arrive.
+2. Deploy, then open the `*.vercel.app` URL to check every page.
 
 Every push to `main` redeploys automatically; other branches get preview URLs.
 
@@ -53,7 +48,7 @@ Every push to `main` redeploys automatically; other branches get preview URLs.
    - Add the **A** record for `@` and the **CNAME** for `www` exactly as Vercel displays them.
    - Leave any **MX / TXT** records (email, verification) alone.
 3. Wait for Vercel to show both domains as **Valid** (minutes to a few hours). SSL is issued automatically.
-4. Once the live domain serves the new site and forms work, cancel the Squarespace *website* plan — keep the *domain* registration (or transfer it).
+4. Once the live domain serves the new site, cancel the Squarespace *website* plan — keep the *domain* registration (or transfer it).
 
 ## Editing content
 

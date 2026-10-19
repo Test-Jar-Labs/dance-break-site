@@ -1,193 +1,201 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import Img from '../components/Img.jsx';
 import usePageMeta from '../components/usePageMeta.js';
+import { Link } from 'react-router-dom';
 import { ASSETS, VIDEO, LINKS } from '../assets.js';
 
 const EVENT_TYPES = [
   {
-    title: 'Corporate Events & Expos',
+    type: 'corporate',
+    cta: 'Quote for a corporate event',
+    title: 'Corporate events & expos',
     image: ASSETS.corporate,
-    body: 'Drive engagement, foot traffic, and branded content. Ideal for conferences, trade shows, retail activations, and internal culture events.',
-    cta: 'Request corporate event details',
+    size: [603, 634],
+    body: 'Drive foot traffic and branded content at conferences, trade shows, retail activations and team events.',
   },
   {
-    title: 'Parties & Celebrations',
+    type: 'party',
+    cta: 'Quote for a party',
+    title: 'Parties & celebrations',
     image: ASSETS.parties,
-    body: 'Birthdays, mitzvahs, school events, community gatherings. Dance Break turns any celebration into a fun, high-energy memory factory.',
-    cta: 'Request party details',
+    size: [603, 616],
+    body: 'Birthdays, mitzvahs, school and community events. A high-energy hit with every age group.',
   },
   {
+    type: 'wedding',
+    cta: 'Quote for a wedding',
     title: 'Weddings',
     image: ASSETS.weddings,
-    body: 'Bring hype, laughter, and unforgettable moments to your reception. Custom dances, special couple features, and videos your guests will cherish.',
-    cta: 'Request wedding details',
+    size: [712, 604],
+    body: 'Custom dances and couple features that bring hype to your reception, and videos guests will keep.',
   },
 ];
 
 const BRANDS = [
   { asset: ASSETS.brandAlibaba, name: 'Alibaba' },
   { asset: ASSETS.brandPixi, name: 'Pixi Beauty' },
-  { asset: ASSETS.brandAkp, name: 'AKP Sports Foundation' },
-  { asset: ASSETS.brandImage77, name: 'Partner brand' },
-  { asset: ASSETS.brandWorld, name: 'World Peace Classic' },
-  { asset: ASSETS.brandWombo, name: 'Wombo.ai' },
   { asset: ASSETS.brandYmca, name: 'YMCA' },
+  { asset: ASSETS.brandWombo, name: 'Wombo.ai' },
+  { asset: ASSETS.brandAkp, name: 'AKP Sports Foundation' },
+  { asset: ASSETS.brandWorld, name: 'World Peace Classic' },
   { asset: ASSETS.brandCresci, name: 'Cresci Labs' },
 ];
 
 const POSTS = [
-  {
-    asset: ASSETS.igManila,
-    href: 'https://www.instagram.com/p/DKA8VtFS_J2/',
-    title: '🎉 Dance Break is going to Manila @ &FRIENDS 🎉',
-    excerpt: 'Bringing the groove to the Philippines for the first time — catch us at the Crystal Pavilion, Okada Hotel, May 30–31.',
-  },
-  {
-    asset: ASSETS.igEdc,
-    href: 'https://www.instagram.com/p/DJ-IDSbBFP2/',
-    title: 'Before the lights. Before the crowd.',
-    excerpt: 'Bringing Dance Break to EDC Las Vegas, for the love of movement. See you on the dance floor 💃 🕺',
-  },
-  {
-    asset: ASSETS.igMommy,
-    href: 'https://www.instagram.com/p/DJFNIMjzmgH/',
-    title: 'Mommy and Me Dance Event',
-    excerpt: 'With @2bstudiosla — a dance class, arts and crafts, and a panel of mompreneurs. ✨',
-  },
-  {
-    asset: ASSETS.igGlow,
-    href: 'https://www.instagram.com/p/DHMcmj3SPqr/',
-    title: 'Glow X Play with Pixi Beauty',
-    excerpt: 'Beauty meets dance at Westfield Century City — makeovers in the Glow Zone, Dance Break in the Play Zone.',
-  },
+  { asset: ASSETS.igEdc, href: 'https://www.instagram.com/p/DJ-IDSbBFP2/', title: 'EDC Las Vegas' },
+  { asset: ASSETS.igManila, href: 'https://www.instagram.com/p/DKA8VtFS_J2/', title: '&FRIENDS, Manila' },
+  { asset: ASSETS.igGlow, href: 'https://www.instagram.com/p/DHMcmj3SPqr/', title: 'Glow X Play with Pixi Beauty' },
+  { asset: ASSETS.igMommy, href: 'https://www.instagram.com/p/DJFNIMjzmgH/', title: 'Mommy and Me Dance' },
 ];
 
 export default function Home() {
   usePageMeta(
-    'Dance Break | Book Now',
-    'Book Dance Break for interactive dance experiences and challenges. The next-gen photobooth. Perfect for all skill levels. Elevate your event today.'
+    'Dance Break | Interactive Dance Game for Events',
+    'Dance Break is an interactive dance game for weddings, corporate events and parties. Guests dance, get scored and leave with a shareable video. From $2,500.'
   );
 
   return (
     <>
-      {/* HERO */}
-      <section className="section section-white hero">
+      <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <Img asset={ASSETS.logo} alt="Dance Break" className="hero-logo" loading="eager" />
-            <h1 className="hero-title">
-              <span className="accent">Unforgettable entertainment</span> for Weddings, Corporate Events &amp; Parties
-            </h1>
-            <p>
-              Dance Break is an interactive dance game that gets guests moving, laughing, and competing while
-              creating instant viral-style videos they’ll replay forever.
+            <h1>Get every guest on the dance floor</h1>
+            <p className="lead">
+              Dance Break is an interactive dance game for weddings, corporate events and parties. Guests
+              dance, get scored, and leave with a video they’ll want to share.
             </p>
-            <p className="location">📍Los Angeles, CA</p>
-            <div className="hero-cta">
-              <Link to="/book-now" className="btn btn-primary btn-wide">Book Now</Link>
-              <p className="fine-print"><em>Starts at $2,500. All quotes are custom.</em></p>
+            <div className="hero-actions">
+              <Link to="/book-now" className="btn btn-primary">Get a quote</Link>
+              <a href="#how" className="btn btn-outline">See how it works</a>
             </div>
-            <p className="trusted"><em>Trusted by brands like EDC • Alibaba • Databricks • Pixi Beauty • YMCA</em></p>
+            <p className="small">From $2,500. Every quote is custom. Based in Los Angeles.</p>
           </div>
           <div className="hero-media">
-            <Img asset={ASSETS.heroPhones} alt="Guests playing Dance Break and their shareable videos" loading="eager" />
+            <Img asset={ASSETS.heroPhones} alt="Guests playing Dance Break and the videos they received" width="2403" height="1867" loading="eager" fetchpriority="high" />
           </div>
         </div>
       </section>
 
-      {/* WHAT IT IS */}
-      <section className="section section-purple">
-        <div className="container split">
-          <div>
-            <ul className="sparkle-list">
-              <li>✨ <strong>30–60 second</strong> sessions</li>
-              <li>✨ <strong>No dance skills</strong> needed</li>
-              <li>✨ <strong>Live leaderboard</strong> + score</li>
-              <li>✨ Designed to generate <strong>shareable content</strong></li>
-            </ul>
-            <p>
-              Dance Break blends real-time dancing, scoring, and instant video creation into one high-energy
-              attraction. Guests follow the on-screen moves, earn a score, and automatically receive a short video
-              of their performance.
+      <section className="logos" aria-label="Brands we’ve worked with">
+        <div className="container">
+          <p>Trusted at events for EDC, Alibaba, Databricks and more</p>
+          <ul className="logo-row">
+            {BRANDS.map((b, i) => (
+              <li key={b.name} data-reveal style={{ '--delay': `${i * 60}ms` }}>
+                <Img asset={b.asset} alt={b.name} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section-purple how" id="how">
+        <div className="container how-grid">
+          <div className="how-copy">
+            <h2 className="display">
+              {['Dance.', 'Score.', 'Share.'].map((w, i) => (
+                <span key={w} data-reveal style={{ '--delay': `${i * 140}ms` }}>{w}</span>
+              ))}
+            </h2>
+            <p data-reveal style={{ '--delay': '420ms' }}>
+              Guests follow the moves on screen, see their score land on the live leaderboard, and walk away
+              with a short video of their performance.
             </p>
-            <p>Perfect for all ages, crowds, and event types.</p>
-            <h3 className="mixed-heading">
-              <em>next-gen</em> photobooth meets TikTok <em>dance challenge</em>
-            </h3>
+            <p data-reveal style={{ '--delay': '500ms' }}>
+              Each round takes 30–60 seconds and nobody needs to know how to dance. We bring the setup and
+              run it, so you can enjoy your own event.
+            </p>
           </div>
-          <div className="split-media">
-            <Img asset={ASSETS.photobooth} alt="The Dance Break kiosk" />
+          <div className="how-media" data-reveal>
+            <Img asset={ASSETS.photobooth} alt="The Dance Break kiosk" width="860" height="1323" />
           </div>
         </div>
       </section>
 
-      {/* VIDEO */}
-      <section className="section section-dark video-section">
+      <PromoVideo />
+
+      <section className="section" id="events">
         <div className="container">
-          <video
-            className="promo-video"
-            src={VIDEO.local}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={ASSETS.photobooth.local}
-            aria-label="Dance Break promo video"
-          />
-        </div>
-      </section>
-
-      {/* EVENT TYPES */}
-      <section className="section section-white">
-        <div className="container event-grid">
-          {EVENT_TYPES.map((e) => (
-            <article className="event-card" key={e.title}>
-              <Img asset={e.image} alt="" />
-              <h4>{e.title}</h4>
-              <p>{e.body}</p>
-              <Link to="/contact-us" className="btn btn-primary">{e.cta}</Link>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* BRANDS */}
-      <section className="section section-dark">
-        <div className="container">
-          <h2 className="section-title">Brands we grooved with</h2>
-          <div className="brand-grid">
-            {BRANDS.map((b) => (
-              <Img key={b.name + b.asset.local} asset={b.asset} alt={b.name} />
-            ))}
-          </div>
-          <Img asset={ASSETS.testimonials} alt="Messages from brands we’ve worked with" className="testimonials" />
-        </div>
-      </section>
-
-      {/* LET'S PARTY + INSTAGRAM */}
-      <section className="section section-white">
-        <div className="container">
-          <div className="party-cta">
-            <h2 className="section-title dark">Let’s party</h2>
-            <Link to="/book-now" className="btn btn-primary btn-wide">Book Now</Link>
-          </div>
-          <div className="ig-grid">
-            {POSTS.map((p) => (
-              <a className="ig-card" href={p.href} target="_blank" rel="noreferrer" key={p.href}>
-                <Img asset={p.asset} alt="" />
-                <div className="ig-text">
-                  <strong>{p.title}</strong>
-                  <span>{p.excerpt}</span>
+          <h2 className="section-title" data-reveal>For every kind of event</h2>
+          <div className="event-grid">
+            {EVENT_TYPES.map((e, i) => (
+              <article className="event" key={e.type} data-reveal style={{ '--delay': `${i * 100}ms` }}>
+                <div className="event-media">
+                  <Img asset={e.image} alt="" width={e.size[0]} height={e.size[1]} />
                 </div>
-              </a>
+                <h3>{e.title}</h3>
+                <p>{e.body}</p>
+                <Link to="/book-now" className="btn btn-outline btn-sm">{e.cta}</Link>
+              </article>
             ))}
           </div>
-          <p className="ig-follow">
-            <a href={LINKS.instagram} target="_blank" rel="noreferrer">Follow @playdancebreak on Instagram →</a>
-          </p>
+        </div>
+      </section>
+
+      <section className="section section-tight-top">
+        <div className="container">
+          <div className="recent-head" data-reveal>
+            <h2>Recent events</h2>
+            <a href={LINKS.instagram} target="_blank" rel="noreferrer" className="btn btn-outline btn-sm">Follow @playdancebreak<span className="sr-only"> (opens in a new tab)</span></a>
+          </div>
+          <ul className="ig-grid">
+            {POSTS.map((p, i) => (
+              <li key={p.href} data-reveal style={{ '--delay': `${i * 80}ms` }}>
+                <a className="ig-card" href={p.href} target="_blank" rel="noreferrer">
+                  <div className="ig-media">
+                    <Img asset={p.asset} alt="" width="600" height="600" />
+                  </div>
+                  <span>{p.title}<span className="sr-only"> on Instagram (opens in a new tab)</span></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section-purple cta-band">
+        <div className="container">
+          <h2 className="display" data-reveal>Let’s party</h2>
+          <p data-reveal style={{ '--delay': '120ms' }}>Tell us about your event and we’ll send a custom quote.</p>
+          <div data-reveal style={{ '--delay': '200ms' }}>
+            <Link to="/book-now" className="btn btn-light">Get a quote</Link>
+          </div>
         </div>
       </section>
     </>
+  );
+}
+
+// Autoplays muted unless the visitor prefers reduced motion. The whole section is
+// hidden if the video file hasn't been added to public/video yet.
+function PromoVideo() {
+  const ref = useRef(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      ref.current?.play().catch(() => {});
+    }
+  }, []);
+
+  if (failed) return null;
+  return (
+    <section className="video-section">
+      <div className="container">
+        <video
+          ref={ref}
+          className="promo-video"
+          src={VIDEO.local}
+          muted
+          loop
+          playsInline
+          controls
+          preload="metadata"
+          poster={ASSETS.photobooth.local}
+          aria-label="Dance Break promo video"
+          onError={() => setFailed(true)}
+        />
+      </div>
+    </section>
   );
 }

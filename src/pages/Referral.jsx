@@ -1,28 +1,26 @@
-import InquiryForm from '../components/InquiryForm.jsx';
+import EmailBlock from '../components/EmailBlock.jsx';
 import usePageMeta from '../components/usePageMeta.js';
 
-const FIELDS = [
-  { name: 'name', type: 'name' },
-  { name: 'email', label: 'Email', type: 'email', required: true },
-  { name: 'business', label: 'Business / Organization Name', type: 'text' },
-  { name: 'website', label: 'Website / Social Media', type: 'text' },
-  {
-    name: 'role',
-    label: 'What best describes you?',
-    type: 'select',
-    required: true,
-    options: [
-      'Event planner',
-      'Venue operator',
-      'DJ / Entertainment Provider',
-      'Photo Booth Company',
-      'Creator / Influencer',
-      'Agency / Corporate Events',
-      'Other',
-    ],
-  },
-  { name: 'eventTypes', label: 'What types of events do you typically work?', type: 'text' },
-  { name: 'eventsPerMonth', label: 'How many events do you typically handle per month?', type: 'text' },
+const APPLY_INCLUDE = [
+  'Your name and business',
+  'Website or social',
+  'What you do (planner, venue, DJ, photo booth, creator, agency or other)',
+  'The kinds of events you work, and how many per month',
+];
+
+const STEPS = [
+  { title: 'Refer a client', body: 'Send an email intro, share your partner code, or have them mention your name.' },
+  { title: 'We handle everything', body: 'Sales, planning, setup, staffing and client support.' },
+  { title: 'Get paid', body: 'Once the client pays in full, you’re paid by ACH, PayPal or check.' },
+];
+
+const WHO = [
+  'Wedding planners and venues',
+  'corporate event planners',
+  'photo booth companies',
+  'marketing and experiential agencies',
+  'DJs, MCs and production crews',
+  'creators and influencers',
 ];
 
 export default function Referral() {
@@ -33,56 +31,37 @@ export default function Referral() {
 
   return (
     <>
-      <section className="section section-purple referral-hero">
+      <section className="page-head page-head-purple">
         <div className="container">
-          <h1 className="page-title light">Become a partner</h1>
-          <h2 className="referral-headline">Earn <span className="highlight">$500+</span> for Every Event You Refer</h2>
-          <p><em>(No equipment, no operations, no obligations)</em></p>
+          <h1>Earn $500+ for every event you refer</h1>
           <p className="lead">
-            Our referral program is built for planners, venues, agencies, and creators who want to recommend
-            something unforgettable and get rewarded every time they do.
+            For planners, venues, agencies and creators. No equipment, no operations, no obligations.
           </p>
         </div>
       </section>
 
-      <section className="section section-white">
-        <div className="container referral-grid">
-          <div className="referral-info">
-            <h4>How it works</h4>
-            <p>
-              This is a <strong>referral program</strong>. Partners do <strong>not</strong> own hardware, operate
-              the activation, or handle event logistics.
-            </p>
-            <ol className="steps">
-              <li><strong>You refer a client to us.</strong><br />Use an email intro, your partner code, or simply have them mention your name.</li>
-              <li><strong>We handle everything.</strong><br />Sales, planning, setup, staffing, delivery, and client support.</li>
-              <li><strong>The client books Dance Break.</strong><br />Once we receive full payment for the activation, the referral is officially counted.</li>
-              <li><strong>You get paid.</strong><br />Choose ACH, PayPal, or mailed check.</li>
+      <section className="section">
+        <div className="container split-layout">
+          <aside className="info">
+            <p className="earn">You earn $500 or 10% of each booking, whichever is higher.</p>
+
+            <h2>How it works</h2>
+            <ol className="plain-steps">
+              {STEPS.map((s) => (
+                <li key={s.title}><strong>{s.title}.</strong> {s.body}</li>
+              ))}
             </ol>
 
-            <h4>What you earn</h4>
-            <p className="earn">$500 or 10%, whichever is higher</p>
+            <h2>Who it’s for</h2>
+            <p>{WHO.join(', ')}. If your clients book events, you can earn from Dance Break.</p>
+          </aside>
 
-            <h4>Who this is for</h4>
-            <ul className="who-list">
-              <li>Wedding planners &amp; venues</li>
-              <li>Corporate event planners</li>
-              <li>Photo booth companies</li>
-              <li>Marketing &amp; experiential agencies</li>
-              <li>DJs, MCs, production crews</li>
-              <li>Creators &amp; influencers</li>
-            </ul>
-            <p>If your clients book events, you can earn from Dance Break.</p>
-          </div>
-
-          <div className="referral-form">
-            <h2 className="section-title dark small">Fill out the form to apply</h2>
-            <InquiryForm
-              formName="Partner Referral Application"
-              fields={FIELDS}
-              submitLabel="Apply"
-              successMessage="Thanks for applying! We’ll review your info and reach out with your partner details."
-            />
+          <div className="panel apply">
+            <h2>Apply by email</h2>
+            <p>Email us with the subject “Partner program” and include:</p>
+            <ul className="include-list">{APPLY_INCLUDE.map((i) => <li key={i}>{i}</li>)}</ul>
+            <EmailBlock />
+            <p className="small">We’ll reply with your partner details.</p>
           </div>
         </div>
       </section>

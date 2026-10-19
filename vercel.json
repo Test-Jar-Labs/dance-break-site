@@ -3,7 +3,7 @@
   "framework": "vite",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/((?!api/|images/|video/|assets/|favicon|robots.txt|sitemap.xml).*)", "destination": "/index.html" }
+    { "source": "/((?!images/|video/|assets/|favicon|robots.txt|sitemap.xml).*)", "destination": "/index.html" }
   ],
   "redirects": [
     { "source": "/cart", "destination": "/", "permanent": true }
