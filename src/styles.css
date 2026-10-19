@@ -38,6 +38,10 @@ h1 { font-size: clamp(40px, 6vw, 72px); }
 h2 { font-size: clamp(32px, 4.4vw, 52px); }
 h3 { margin: 0 0 .4em; font-size: 20px; font-weight: 800; line-height: 1.25; color: var(--ink); }
 p { margin: 0 0 1em; }
+/* No single words stranded on a last line: headings and short labels balance their lines,
+   longer text uses the browser's "pretty" wrapping, which avoids one-word last lines. */
+h1, h2, h3, blockquote, figcaption, .btn, .ig-card span { text-wrap: balance; }
+p, li { text-wrap: pretty; }
 :focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -126,6 +130,8 @@ p { margin: 0 0 1em; }
 .hero { padding: clamp(32px, 5vw, 72px) 0 clamp(56px, 7vw, 96px); overflow: hidden; }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
 .hero-copy { max-width: 560px; }
+/* Sized so the headline fits its half-width column in two or three even lines. */
+.hero h1 { font-size: clamp(40px, 4.6vw, 60px); }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin: 36px 0 20px; }
 /* Image runs slightly past the container edge so the phones feel bigger than the column. */
 .hero-media { margin-right: calc(var(--gutter) * -0.75); }
@@ -188,7 +194,7 @@ p { margin: 0 0 1em; }
 .ig-media { overflow: hidden; border-radius: var(--radius); margin-bottom: 12px; }
 .ig-media img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; transition: transform .5s var(--ease-out); }
 .ig-card:hover .ig-media img { transform: scale(1.06); }
-.ig-card span { font-size: 15px; font-weight: 700; color: var(--ink); }
+.ig-card > span { display: block; font-size: 15px; font-weight: 700; color: var(--ink); }
 .ig-card:hover span { color: var(--purple); }
 @media (max-width: 900px) { .ig-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; } }
 
@@ -307,6 +313,9 @@ p { margin: 0 0 1em; }
   .logo-row img { height: 30px; }
 
   .how-copy p { font-size: 17px; }
+
+  /* Page headlines are long uppercase lines; slightly smaller so they break into even lines. */
+  .page-head h1 { font-size: 34px; }
 
   /* Footer links stack as full-height rows instead of wrapping unevenly. */
   .footer-top { flex-direction: column; gap: 16px; padding-bottom: 16px; }
