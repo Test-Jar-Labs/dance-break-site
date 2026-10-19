@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Img from './Img.jsx';
 import { ASSETS } from '../assets.js';
@@ -13,16 +13,22 @@ export default function Header() {
   const { pathname, hash } = useLocation();
   useEffect(() => { setOpen(false); }, [pathname, hash]);
 
-  // Escape closes the mobile menu.
+  // Escape, or a tap on the dimmed page outside the header, closes the mobile menu.
+  const headerRef = useRef(null);
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    const onPointer = (e) => { if (!headerRef.current?.contains(e.target)) setOpen(false); };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+    };
   }, [open]);
 
   return (
-    <header className={`site-header ${open ? 'is-open' : ''}`}>
+    <header ref={headerRef} className={`site-header ${open ? 'is-open' : ''}`}>
       <div className="container header-inner">
         <Link to="/" className="header-logo" aria-label="Dance Break home">
           <Img asset={ASSETS.logo} alt="Dance Break" loading="eager" />

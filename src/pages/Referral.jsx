@@ -37,6 +37,7 @@ export default function Referral() {
           <p className="lead">
             For planners, venues, agencies and creators. No equipment, no operations, no obligations.
           </p>
+          <a href="#apply" className="btn btn-light page-head-cta">How to apply</a>
         </div>
       </section>
 
@@ -56,7 +57,7 @@ export default function Referral() {
             <p>{WHO.join(', ')}. If your clients book events, you can earn from Dance Break.</p>
           </aside>
 
-          <div className="panel apply">
+          <div className="panel apply" id="apply">
             <h2>Apply by email</h2>
             <p>Email us with the subject “Partner program” and include:</p>
             <ul className="include-list">{APPLY_INCLUDE.map((i) => <li key={i}>{i}</li>)}</ul>
