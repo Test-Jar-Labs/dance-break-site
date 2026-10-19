@@ -49,7 +49,10 @@ export const ASSETS = {
 const STATIC = 'https://static1.squarespace.com/static/68e99499b21c442fceea1771/t';
 export const META_IMAGES = [
   { file: 'og-image.jpg', remote: `${STATIC}/68e994bab21c442fceea1c00/1746758179359/bggg.png` },
-  { file: 'app-icon.png', remote: `${STATIC}/68e99acdcde00b741d353686/1760139981172/App+Icon+2.png`, width: 192 },
+  // The disco-ball mark (source-images/favicon-mark.src, a PNG), on a transparent square so its
+  // aspect ratio is kept. Its drop shadow hangs 33px below the badge, so the same space is added
+  // on top to center the badge itself rather than badge + shadow.
+  { file: 'favicon.png', source: 'favicon-mark', square: 192, padTop: 33 },
 ];
 
 // The promo video, built from source-images/video/dance-break-original.mp4 with ffmpeg

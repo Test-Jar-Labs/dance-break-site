@@ -59,10 +59,15 @@ for (const asset of Object.values(ASSETS)) {
 }
 
 for (const m of META_IMAGES) {
-  const src = await original(m.file.replace(/\.\w+$/, ''), m.remote);
+  const src = await original(m.source || m.file.replace(/\.\w+$/, ''), m.remote);
   const out = join(PUBLIC, m.file);
-  let img = sharp(src);
+  // extend() runs after resize() inside one sharp pipeline, so pad in a separate pass first.
+  const padded = m.padTop
+    ? await sharp(src).extend({ top: m.padTop, background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer()
+    : src;
+  let img = sharp(padded);
   if (m.width) img = img.resize({ width: m.width, withoutEnlargement: true });
+  if (m.square) img = img.resize({ width: m.square, height: m.square, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } });
   img = m.file.endsWith('.png') ? img.png({ compressionLevel: 9 }) : img.jpeg({ quality: 88, mozjpeg: true });
   await img.toFile(out);
   console.log(`✓ ${m.file}  ${await kb(out)}`);
